@@ -31,6 +31,8 @@ class GameEngine {
         // To control if the game ended.
         this.gameWon = false;
 
+        this.spamLock = false;
+
         console.log("Map length: " + this.map.total_tiles);
         console.log("Foot placement: " + this.player_hover.foot_placement);
         console.log("Current position: " + this.player_hover.current_tile_position);
@@ -44,8 +46,8 @@ class GameEngine {
         //Detect which key is being pressed.
         var key = e.key;
 
-        if ( ((key == "a" || key == "A" || key == "d" || key == "D" || key == "w" || key == "W") && (!this.game_paused && !this.gameWon)) ||
-        ((key == "a" || key == "A" || key == "d" || key == "D" || key == "w" || key == "W") && !this.gameWon) ) {
+        if ( (key == "a" || key == "A" || key == "d" || key == "D" || key == "w" || key == "W") && 
+        (!this.gameWon && !this.game_paused) ) {
             //Controls the movement of the map
             this.jumpAction(key);
             //Update the opacity after each movement
@@ -61,7 +63,8 @@ class GameEngine {
             location.reload();
         }
 
-        if (this.gameWon) {
+        if (this.gameWon && this.spamLock == false) {
+            this.spamLock = true ;
             this.victoryScreen();
             setTimeout(() => {
                 location.reload();
@@ -224,13 +227,17 @@ class GameEngine {
 
     editPause() {
         var game_screen = document.getElementById("game_screen");
+        var bg = document.getElementById("bgSound");
+
         if (!this.game_paused) {
             //Creates a pause screen
             var pause = document.createElementNS("http://www.w3.org/2000/svg", "image");
-            //  Attributes pause (when paused inside the game)
 
+            //  Sound effects
             document.getElementById("pauseSound").play();
+            bg.volume = 0.1;
 
+            // Attribu
             pause.setAttribute("href", "assets/pause.png");
             pause.setAttribute("x", 0);
             pause.id = "pause";
@@ -247,6 +254,7 @@ class GameEngine {
 
         } else {
             //Deletes the game screen
+            bg.volume = 0.4;
             var current_pause = document.getElementById("game_screen").getElementById("pause");
             game_screen.removeChild(current_pause);
         }
@@ -283,6 +291,7 @@ function gameElements() {
     pauseSound.src = "assets/pauseSound.mp3"
     pauseSound.controls = false;
     pauseSound.id = "pauseSound";
+    pauseSound.volume = 0.7
     pauseSound.style = "display:none"
     document.body.appendChild(pauseSound);
 
@@ -309,6 +318,7 @@ function gameElements() {
     bgSound.id = "bgSound";
     bgSound.style = "display:none"
     bgSound.loop = true;
+    bgSound.volume = 0.4;
     document.body.appendChild(bgSound);
 }
 

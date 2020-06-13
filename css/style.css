@@ -1,6 +1,7 @@
 body {
     box-sizing: border-box;
-    background: url("../assets/wallpaper.jpg") no-repeat fixed center; 
+    background: url("../assets/wallpaper3.png");
+    background-size: cover; 
 }
 
 #game_screen {
