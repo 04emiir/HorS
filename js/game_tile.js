@@ -48,12 +48,12 @@ export class Shock_trap extends Game_tile {
 export class Left_foot_tile extends Game_tile {
     constructor(spawn_x, spawn_y) {
         super(spawn_x, spawn_y);
-        this.tile.setAttribute("href", "./assets/leftfoot.jpg");
+        this.tile.setAttribute("href", "assets/leftfoot.jpg");
     }
 
     stepped() {
         //When steping on; return false. Change the image.
-        this.tile.setAttribute("href", "./assets/leftfoot_activated.jpg");
+        this.tile.setAttribute("href", "assets/leftfoot_activated.jpg");
         return false;
     }
     
@@ -63,12 +63,12 @@ export class Left_foot_tile extends Game_tile {
 export class Right_foot_tile extends Game_tile {
     constructor(spawn_x, spawn_y) {
         super(spawn_x, spawn_y);
-        this.tile.setAttribute("href", "./assets/rightfoot.png");      
+        this.tile.setAttribute("href", "assets/rightfoot.png");      
     }
 
     stepped() {
         //When steping on; return false. Change the image.
-        this.tile.setAttribute("href", "./assets/rightfoot_activated.png");
+        this.tile.setAttribute("href", "assets/rightfoot_activated.png");
         return false;
     }
 }
@@ -77,7 +77,7 @@ export class Right_foot_tile extends Game_tile {
 export class Finish_tile extends Game_tile {
     constructor(spawn_x, spawn_y) {
         super(spawn_x, spawn_y);
-        this.tile.setAttribute("href", "./assets/starting_finish_line.png");      
+        this.tile.setAttribute("href", "assets/starting_finish_line.png");      
     }
 
     stepped() {

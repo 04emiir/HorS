@@ -117,23 +117,23 @@ export class Player {
         var ending = endPosition - 6;
 
         if (this.position_y == 384 && this.current_tile_position == 3) {
-            // Single jump. Blocks the arrow in tile 3, 384px.
+            // Single jump or double jump on the tile 3 (first block point). Blocks the arrow on 384px.
             this.set_hover_static = true;
         } else if(this.current_tile_position == ending) {
-            // Single jump. Free the arrow near the end.
+            // Single jump or double jump on the tile 55 (last block point). Free the arrow.
             this.set_hover_static = false;
         } else if (this.position_y < 384 && this.current_tile_position == 4) {
-            // When trying to bigJump over the limit in the beginning. Returns special signal.
+            // When trying to bigJump over the first block point. Returns special signal.
             this.position_y = 384;
             this.set_hover_static = true;
             return 2;
         } else if (this.current_tile_position == 56 && this.set_hover_static) {
-            // When trying to bigJump over the limit near the end. Returns special signal.
+            // When trying to bigJump over the limit last block point. Returns special signal.
             this.position_y = 320;
             this.set_hover_static = false;
             return 3;
         } else if (this.position_y <= 0 || this.current_tile_position >= endPosition) {
-            // When trying to bigJump over the end. Or landing in the finish line. Return special signal
+            // When trying to bigJump over the end or landing in the finish line. Return special signal
             this.position_y = 0;
             this.current_tile_position = 61;
             return 4;

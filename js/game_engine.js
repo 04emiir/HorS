@@ -276,32 +276,32 @@ window.onload = () => {
 
 function gameElements() {
     var pauseSound = document.createElement("AUDIO");
-    pauseSound.src = "../assets/pauseSound.mp3"
+    pauseSound.src = "assets/pauseSound.mp3"
     pauseSound.controls = false;
     pauseSound.id = "pauseSound";
     pauseSound.style = "display:none"
     document.body.appendChild(pauseSound);
 
     var zapSound = document.createElement("AUDIO");
-    zapSound.src = "../assets/zapSound.wav"
+    zapSound.src = "assets/zapSound.wav"
     zapSound.id = "zapSound";
     zapSound.style = "display:none"
     document.body.appendChild(zapSound);
 
     var jumpSound = document.createElement("AUDIO");
-    jumpSound.src = "../assets/jumpSound.wav"
+    jumpSound.src = "assets/jumpSound.wav"
     jumpSound.id = "jumpSound";
     jumpSound.style = "display:none"
     document.body.appendChild(jumpSound);
 
     var endSound = document.createElement("AUDIO");
-    endSound.src = "../assets/endSound.wav"
+    endSound.src = "assets/endSound.wav"
     endSound.id = "endSound";
     endSound.style = "display:none"
     document.body.appendChild(endSound);
 
     var bgSound = document.createElement("AUDIO");
-    bgSound.src = "../assets/backgroundSound.mp3"
+    bgSound.src = "assets/backgroundSound.mp3"
     bgSound.id = "bgSound";
     bgSound.style = "display:none"
     bgSound.loop = true;
