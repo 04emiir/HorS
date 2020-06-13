@@ -34,7 +34,7 @@ export class Game_tile {
 export class Shock_trap extends Game_tile {
     constructor(spawn_x, spawn_y) {
         super(spawn_x, spawn_y);
-        this.tile.setAttribute("href", "./assets/shocktrap.png");
+        this.tile.setAttribute("href", "assets/shocktrap.png");
     }
 
     stepped() {
