@@ -276,12 +276,18 @@ class GameEngine {
         game_screen.appendChild(win);
 
     }
+
+    countdown() {
+        var game_screen = document.getElementById("game_screen");
+        var win = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    }
 }
 
 window.onload = () => {
     gameElements();
-    var game = new GameEngine();
     document.getElementById("bgSound").play();
+    var game = new GameEngine();
+
 
 
 }
@@ -304,6 +310,7 @@ function gameElements() {
     var jumpSound = document.createElement("AUDIO");
     jumpSound.src = "assets/jumpSound.wav"
     jumpSound.id = "jumpSound";
+    jumpSound.volume = 0.6
     jumpSound.style = "display:none"
     document.body.appendChild(jumpSound);
 
@@ -320,6 +327,10 @@ function gameElements() {
     bgSound.loop = true;
     bgSound.volume = 0.4;
     document.body.appendChild(bgSound);
+}
+
+function controlsOverview() {
+
 }
 
 
