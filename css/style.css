@@ -1,0 +1,15 @@
+body {
+    box-sizing: border-box;
+    background: url("../assets/wallpaper.jpg") no-repeat fixed center; 
+}
+
+#game_screen {
+    border: 1px solid transparent;
+    display: block;
+    margin: 5vh auto 0;
+}
+
+#stopwatch {
+    float:right;
+    color: yellow;
+}
