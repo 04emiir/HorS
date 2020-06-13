@@ -55,6 +55,10 @@ class GameEngine {
             this.editPause();
             this.game_paused = !this.game_paused;
 
+        } else if ( (key == "q" || key == "Q") && this.game_paused) {
+            window.location.href = "https://www.youtube.com/watch?v=aKCFbZhWNW0";
+        } else if ( (key == "r" || key == "R") && this.game_paused) {
+            location.reload();
         }
 
         if (this.gameWon) {
@@ -227,7 +231,7 @@ class GameEngine {
 
             document.getElementById("pauseSound").play();
 
-            pause.setAttribute("href", "../assets/pause.png");
+            pause.setAttribute("href", "assets/pause.png");
             pause.setAttribute("x", 0);
             pause.id = "pause";
             pause.setAttribute("y", 0);
@@ -255,7 +259,7 @@ class GameEngine {
         document.getElementById("endSound").play();
 
         //  Attributes win (when winning the game)
-        win.setAttribute("href", "../assets/win.png");
+        win.setAttribute("href", "assets/win.png");
         win.setAttribute("x", 0);
         win.id = "win";
         win.setAttribute("y", 0);
