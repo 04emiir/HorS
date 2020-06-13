@@ -39,7 +39,7 @@ export class Player {
         
     }
 
-    bigJump(endPosition) {
+    bigJump(total_length) {
         //The player does a big jump, jumping two tiles instead of one, and landing with both feet.
         if (this.set_hover_static) {
             // The player has reach the middle of the screen. The arrows wont move.
@@ -62,10 +62,10 @@ export class Player {
 
         //Adds two to the "row position"
         this.current_tile_position = this.current_tile_position + 2;
-        return(this.unlockHoverConditions(endPosition));
+        return(this.unlockHoverConditions(total_length));
     }
 
-    jumpLeft(endPosition) {
+    jumpLeft(total_length) {
         //The player does a left jump, landing one tile forward with his left foot.
         if (this.set_hover_static) {
             this.player_hover_right.setAttribute("opacity", 0.3);
@@ -82,10 +82,10 @@ export class Player {
 
         //Adds one to the "row position"
         ++this.current_tile_position;
-        return(this.unlockHoverConditions(endPosition));
+        return(this.unlockHoverConditions(total_length));
     }
 
-    jumpRight(endPosition) {
+    jumpRight(total_length) {
         //The player does a right jump, landing one tile forward with his right foot.
         if (this.set_hover_static) {
             this.player_hover_left.setAttribute("opacity", 0.3);
@@ -102,7 +102,7 @@ export class Player {
 
         //Adds one to the "row position"
         ++this.current_tile_position;
-        return(this.unlockHoverConditions(endPosition));
+        return(this.unlockHoverConditions(total_length));
 
     }
 
@@ -112,30 +112,30 @@ export class Player {
         this.player_hover_left.setAttribute("y", this.position_y);
     }
 
-    unlockHoverConditions(endPosition) {
+    unlockHoverConditions(total_length) {
         // Limiter when being close to the end.
-        var ending = endPosition - 6;
+        var blockPoint = total_length - 6;
 
         if (this.position_y == 384 && this.current_tile_position == 3) {
             // Single jump or double jump on the tile 3 (first block point). Blocks the arrow on 384px.
             this.set_hover_static = true;
-        } else if(this.current_tile_position == ending) {
-            // Single jump or double jump on the tile 55 (last block point). Free the arrow.
+        } else if(this.current_tile_position == blockPoint) {
+            // Single jump or double jump on the last block point. Free the arrow.
             this.set_hover_static = false;
         } else if (this.position_y < 384 && this.current_tile_position == 4) {
             // When trying to bigJump over the first block point. Returns special signal.
             this.position_y = 384;
             this.set_hover_static = true;
             return 2;
-        } else if (this.current_tile_position == 56 && this.set_hover_static) {
+        } else if (this.current_tile_position == (blockPoint + 1) && this.set_hover_static) {
             // When trying to bigJump over the limit last block point. Returns special signal.
             this.position_y = 320;
             this.set_hover_static = false;
             return 3;
-        } else if (this.position_y <= 0 || this.current_tile_position >= endPosition) {
+        } else if (this.position_y <= 0 || this.current_tile_position >= total_length) {
             // When trying to bigJump over the end or landing in the finish line. Return special signal
             this.position_y = 0;
-            this.current_tile_position = 61;
+            this.current_tile_position = total_length;
             return 4;
         }
     }

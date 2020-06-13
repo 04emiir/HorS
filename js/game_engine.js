@@ -12,13 +12,17 @@ class GameEngine {
     constructor() {
         //Generates the tilemap with difficulty selected.
         this.map = new Tilemap();
-        this.map.easyMap();
+        this.map.hardMap();
 
         //Create the player arrows.
         this.player_hover = new Player();
 
         //Apply opacity to the tilemap.
         this.map.applyOpacity(this.player_hover.current_tile_position);
+
+        this.play_screen = document.getElementById("game_screen");
+
+        this.showRaceInfo();
 
         // Async callbacks for the key presses. Cooldown to not spam the jumps.
         document.onkeydown = (e) => this.keyboardInput(e);
@@ -51,12 +55,13 @@ class GameEngine {
             // Creates or deletes the pause screen.
             this.editPause();
             this.game_paused = !this.game_paused;
-
         } else if ((key == "q" || key == "Q") && this.game_paused) {
             window.location.href = "https://www.youtube.com/watch?v=aKCFbZhWNW0";
         } else if ((key == "r" || key == "R") && this.game_paused) {
             location.reload();
         }
+
+        this.updateRemainingTile();
 
         if (this.gameWon && this.spamLock == false) {
             this.spamLock = true;
@@ -263,16 +268,83 @@ class GameEngine {
     }
 
     showControls() {
+
+    }
+
+    showRaceInfo() {
         var game_screen = document.getElementById("game_screen");
 
-        var w_control_text = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        var foot = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        foot.setAttribute("x", 960);
+        foot.setAttribute("y", 150);
+        foot.id = "foot";
+        foot.setAttribute("width", 64);
+        foot.setAttribute("height", 64);
+        foot.setAttribute("href", "assets/foot.png");
+        game_screen.appendChild(foot);
+
+        var current_tiles_remaining = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        current_tiles_remaining.textContent = "0" + this.player_hover.current_tile_position + " / " + this.map.total_tiles;
+        current_tiles_remaining.setAttribute("x", 1056);
+        current_tiles_remaining.setAttribute("y", 198);
+        current_tiles_remaining.id = "current_tiles_remaining";
+        current_tiles_remaining.setAttribute("fill", "yellow");
+        current_tiles_remaining.setAttribute("font-size", 40);
+        current_tiles_remaining.setAttribute("font-weight", "bold");
+        game_screen.appendChild(current_tiles_remaining);
+
+        var clock = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        clock.setAttribute("x", 968);
+        clock.setAttribute("y", 308);
+        clock.id = "clock";
+        clock.setAttribute("width", 48);
+        clock.setAttribute("height", 48);
+        clock.setAttribute("href", "assets/clock.png");
+        game_screen.appendChild(clock);
+
+        var remaining_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        remaining_time.textContent = "00:00:000";
+        remaining_time.setAttribute("x", 1056);
+        remaining_time.setAttribute("y", 348);
+        remaining_time.id = "remaining_time";
+        remaining_time.setAttribute("fill", "yellow");
+        remaining_time.setAttribute("font-size", 40);
+        remaining_time.setAttribute("font-weight", "bold");
+        game_screen.appendChild(remaining_time);
+
+        var crown = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        crown.setAttribute("x", 960);
+        crown.setAttribute("y", 450);
+        crown.id = "crown";
+        crown.setAttribute("width", 64);
+        crown.setAttribute("height", 64);
+        crown.setAttribute("href", "assets/crown.png");
+        game_screen.appendChild(crown);
+
+        var best_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        best_time.textContent = "00:00:000";
+        best_time.setAttribute("x", 1056);
+        best_time.setAttribute("y", 498);
+        best_time.id = "best_time";
+        best_time.setAttribute("fill", "yellow");
+        best_time.setAttribute("font-size", 40);
+        best_time.setAttribute("font-weight", "bold");
+        game_screen.appendChild(best_time);
+    }
+
+    updateRemainingTile() {
+        if (this.player_hover.current_tile_position < 10)
+            this.play_screen.getElementById("current_tiles_remaining").textContent = "0" + this.player_hover.current_tile_position +
+            " / " + this.map.total_tiles;
+        else
+            this.play_screen.getElementById("current_tiles_remaining").textContent = this.player_hover.current_tile_position +
+            " / " + this.map.total_tiles;
     }
 }
 
 gameSounds();
 
 var game_on = false
-
 var game_screen = document.getElementById("game_screen");
 var countdown = document.createElementNS("http://www.w3.org/2000/svg", "image")
 countdown.setAttribute("x", 0);
@@ -290,8 +362,6 @@ document.onkeydown = function (e) {
         countdownScreen();
     }
 }
-
-
 
 function gameSounds() {
     var pauseSound = document.createElement("AUDIO");
@@ -374,6 +444,18 @@ function countdownScreen() {
 
     }, 1200);
 }
+
+function msecondsToClock(duration) {
+    var milliseconds = parseInt((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60);
+
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return minutes + ":" + seconds + "." + milliseconds;
+}
+
 
 
 /*

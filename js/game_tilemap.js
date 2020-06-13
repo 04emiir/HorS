@@ -9,6 +9,8 @@ export class Tilemap {
 
         // Attribute that contains the total length of the race (start and finish line included).
         this.total_tiles;
+
+        this.time_remaining = 70000;
     }
 
     easyMap() {
