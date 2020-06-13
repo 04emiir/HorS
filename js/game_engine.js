@@ -33,21 +33,16 @@ class GameEngine {
 
         this.spamLock = false;
 
-        console.log("Map length: " + this.map.total_tiles);
-        console.log("Foot placement: " + this.player_hover.foot_placement);
-        console.log("Current position: " + this.player_hover.current_tile_position);
-        console.log("Arrow lock: " + this.player_hover.set_hover_static);
-        console.log("Pause status: " + this.game_paused);
-        console.log("Game status: " + this.gameWon);
-        console.log("----------");
+        document.getElementById("bgSound").volume = 0.4;
+
     }
 
     keyboardInput(e) {
         //Detect which key is being pressed.
         var key = e.key;
 
-        if ( (key == "a" || key == "A" || key == "d" || key == "D" || key == "w" || key == "W") && 
-        (!this.gameWon && !this.game_paused) ) {
+        if ((key == "a" || key == "A" || key == "d" || key == "D" || key == "w" || key == "W") &&
+            (!this.gameWon && !this.game_paused)) {
             //Controls the movement of the map
             this.jumpAction(key);
             //Update the opacity after each movement
@@ -57,29 +52,19 @@ class GameEngine {
             this.editPause();
             this.game_paused = !this.game_paused;
 
-        } else if ( (key == "q" || key == "Q") && this.game_paused) {
+        } else if ((key == "q" || key == "Q") && this.game_paused) {
             window.location.href = "https://www.youtube.com/watch?v=aKCFbZhWNW0";
-        } else if ( (key == "r" || key == "R") && this.game_paused) {
+        } else if ((key == "r" || key == "R") && this.game_paused) {
             location.reload();
         }
 
         if (this.gameWon && this.spamLock == false) {
-            this.spamLock = true ;
+            this.spamLock = true;
             this.victoryScreen();
             setTimeout(() => {
                 location.reload();
             }, 4000);
         }
-
-        console.log("Map length: " + this.map.total_tiles);
-        console.log("Foot placement: " + this.player_hover.foot_placement);
-        console.log("Current position: " + this.player_hover.current_tile_position);
-        console.log("Arrow lock: " + this.player_hover.set_hover_static);
-        console.log("Pause status: " + this.game_paused);
-        console.log("Game status: " + this.gameWon);
-        console.log("----------");
-
-
     }
 
     jumpAction(key) {
@@ -277,22 +262,38 @@ class GameEngine {
 
     }
 
-    countdown() {
+    showControls() {
         var game_screen = document.getElementById("game_screen");
-        var win = document.createElementNS("http://www.w3.org/2000/svg", "image");
+
+        var w_control_text = document.createElementNS("http://www.w3.org/2000/svg", "image");
     }
 }
 
-window.onload = () => {
-    gameElements();
-    document.getElementById("bgSound").play();
-    var game = new GameEngine();
+gameSounds();
 
+var game_on = false
 
+var game_screen = document.getElementById("game_screen");
+var countdown = document.createElementNS("http://www.w3.org/2000/svg", "image")
+countdown.setAttribute("x", 0);
+countdown.setAttribute("y", 0);
+countdown.id = "countdown";
+countdown.setAttribute("width", 1280);
+countdown.setAttribute("height", 640);
+countdown.setAttribute("href", "assets/readyimage.png");
+game_screen.appendChild(countdown);
 
+document.onkeydown = function (e) {
+    var key = e.key;
+    if (key == "Enter" && !game_on) {
+        game_on = true;
+        countdownScreen();
+    }
 }
 
-function gameElements() {
+
+
+function gameSounds() {
     var pauseSound = document.createElement("AUDIO");
     pauseSound.src = "assets/pauseSound.mp3"
     pauseSound.controls = false;
@@ -325,15 +326,62 @@ function gameElements() {
     bgSound.id = "bgSound";
     bgSound.style = "display:none"
     bgSound.loop = true;
-    bgSound.volume = 0.4;
+    bgSound.volume = 0.1;
     document.body.appendChild(bgSound);
+
+    bgSound.play();
+
+    var readySound = document.createElement("AUDIO");
+    readySound.src = "assets/readySound.wav"
+    readySound.id = "readySound";
+    readySound.style = "display:none"
+    document.body.appendChild(readySound);
+
+    var beepSound = document.createElement("AUDIO");
+    beepSound.src = "assets/beepSound.wav"
+    beepSound.id = "beepSound";
+    beepSound.style = "display:none"
+    document.body.appendChild(beepSound);
 }
 
-function controlsOverview() {
+function countdownScreen() {
+    document.getElementById("readySound").play();
 
+    setTimeout(() => {
+        document.getElementById("beepSound").play();
+        countdown.setAttribute("href", "assets/3.png");
+
+        setTimeout(() => {
+            document.getElementById("beepSound").play();
+            countdown.setAttribute("href", "assets/2.png");
+
+            setTimeout(() => {
+                document.getElementById("beepSound").play();
+                countdown.setAttribute("href", "assets/1.png");
+
+                setTimeout(() => {
+                    document.getElementById("endSound").play();
+
+                    var screen = document.getElementById("game_screen");
+                    screen.removeChild(document.getElementById("countdown"));
+
+                    var game = new GameEngine();
+                }, 1200);
+
+            }, 1200);
+
+        }, 1200);
+
+    }, 1200);
 }
 
 
-
-
-
+/*
+console.log("Map length: " + this.map.total_tiles);
+        console.log("Foot placement: " + this.player_hover.foot_placement);
+        console.log("Current position: " + this.player_hover.current_tile_position);
+        console.log("Arrow lock: " + this.player_hover.set_hover_static);
+        console.log("Pause status: " + this.game_paused);
+        console.log("Game status: " + this.gameWon);
+        console.log("----------");
+*/
