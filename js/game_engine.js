@@ -53,6 +53,14 @@ class GameEngine {
 
         document.getElementById("bgSound").volume = 0.4;
 
+        console.log("Map length: " + this.map.total_tiles);
+        console.log("Foot placement: " + this.player_hover.foot_placement);
+        console.log("Current position: " + this.player_hover.current_tile_position);
+        console.log("Arrow lock: " + this.player_hover.set_hover_static);
+        console.log("Pause status: " + this.game_paused);
+        console.log("Game status: " + this.gameWon);
+        console.log("----------");
+
     }
 
     keyboardInput(e) {
@@ -80,6 +88,14 @@ class GameEngine {
 
         this.updateRemainingTile();
 
+        console.log("Map length: " + this.map.total_tiles);
+        console.log("Foot placement: " + this.player_hover.foot_placement);
+        console.log("Current position: " + this.player_hover.current_tile_position);
+        console.log("Arrow lock: " + this.player_hover.set_hover_static);
+        console.log("Pause status: " + this.game_paused);
+        console.log("Game status: " + this.gameWon);
+        console.log("----------");
+
         if (this.gameWon && this.spamLock == false) {
             this.spamLock = true;
             this.victoryScreen();
@@ -87,6 +103,8 @@ class GameEngine {
                 location.reload();
             }, 4000);
         }
+
+
     }
 
     jumpAction(key) {
@@ -567,12 +585,5 @@ function removeDifficultySelection() {
 
 
 
-/*
-console.log("Map length: " + this.map.total_tiles);
-        console.log("Foot placement: " + this.player_hover.foot_placement);
-        console.log("Current position: " + this.player_hover.current_tile_position);
-        console.log("Arrow lock: " + this.player_hover.set_hover_static);
-        console.log("Pause status: " + this.game_paused);
-        console.log("Game status: " + this.gameWon);
-        console.log("----------");
-*/
+
+
