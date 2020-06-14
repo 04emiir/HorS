@@ -9,10 +9,21 @@ import {
 
 // Class to generate and control the flow of the game.
 class GameEngine {
-    constructor() {
+    constructor(difficulty) {
         //Generates the tilemap with difficulty selected.
         this.map = new Tilemap();
-        this.map.hardMap();
+
+        switch (difficulty) {
+            case (1):
+                this.map.easyMap();
+                break;
+            case (2):
+                this.map.mediumMap();
+                break;
+            case (3):
+                this.map.hardMap();
+                break;
+        }
 
         //Create the player arrows.
         this.player_hover = new Player();
@@ -23,6 +34,7 @@ class GameEngine {
         this.play_screen = document.getElementById("game_screen");
 
         this.showRaceInfo();
+        this.editControls();
 
         // Async callbacks for the key presses. Cooldown to not spam the jumps.
         document.onkeydown = (e) => this.keyboardInput(e);
@@ -36,6 +48,8 @@ class GameEngine {
         this.gameWon = false;
 
         this.spamLock = false;
+
+        this.turn_controls = true;
 
         document.getElementById("bgSound").volume = 0.4;
 
@@ -59,6 +73,9 @@ class GameEngine {
             window.location.href = "https://www.youtube.com/watch?v=aKCFbZhWNW0";
         } else if ((key == "r" || key == "R") && this.game_paused) {
             location.reload();
+        } else if ((key == "c" || key == "C") && !this.game_paused) {
+            this.editControls();
+            this.turn_controls = !this.turn_controls;
         }
 
         this.updateRemainingTile();
@@ -267,8 +284,34 @@ class GameEngine {
 
     }
 
-    showControls() {
+    editControls() {
+        var game_screen = document.getElementById("game_screen");
 
+        if (!this.turn_controls) {
+
+            //Creates a pause screen
+            var controls = document.createElementNS("http://www.w3.org/2000/svg", "image");
+
+            // Attribu
+            controls.setAttribute("href", "assets/controls_menu.png");
+            controls.setAttribute("x", 0);
+            controls.id = "controls";
+            controls.setAttribute("y", 0);
+            controls.setAttribute("width", 576);
+            controls.setAttribute("height", 640);
+            game_screen.appendChild(controls);
+
+            // To avoid spamming "Esc"
+            this.cooldown = setTimeout(() => {
+                this.canJump = true;
+                this.cooldown = null;
+            }, 1000);
+
+        } else {
+            //Deletes the game screen
+            var control_image = document.getElementById("game_screen").getElementById("controls");
+            game_screen.removeChild(control_image);
+        }
     }
 
     showRaceInfo() {
@@ -289,7 +332,7 @@ class GameEngine {
         current_tiles_remaining.setAttribute("y", 198);
         current_tiles_remaining.id = "current_tiles_remaining";
         current_tiles_remaining.setAttribute("fill", "yellow");
-        current_tiles_remaining.setAttribute("font-size", 40);
+        current_tiles_remaining.setAttribute("font-size", 20);
         current_tiles_remaining.setAttribute("font-weight", "bold");
         game_screen.appendChild(current_tiles_remaining);
 
@@ -308,7 +351,7 @@ class GameEngine {
         remaining_time.setAttribute("y", 348);
         remaining_time.id = "remaining_time";
         remaining_time.setAttribute("fill", "yellow");
-        remaining_time.setAttribute("font-size", 40);
+        remaining_time.setAttribute("font-size", 20);
         remaining_time.setAttribute("font-weight", "bold");
         game_screen.appendChild(remaining_time);
 
@@ -327,7 +370,7 @@ class GameEngine {
         best_time.setAttribute("y", 498);
         best_time.id = "best_time";
         best_time.setAttribute("fill", "yellow");
-        best_time.setAttribute("font-size", 40);
+        best_time.setAttribute("font-size", 20);
         best_time.setAttribute("font-weight", "bold");
         game_screen.appendChild(best_time);
     }
@@ -342,26 +385,27 @@ class GameEngine {
     }
 }
 
+////// GAME IS BORN HERE ////
 gameSounds();
 
-var game_on = false
-var game_screen = document.getElementById("game_screen");
-var countdown = document.createElementNS("http://www.w3.org/2000/svg", "image")
-countdown.setAttribute("x", 0);
-countdown.setAttribute("y", 0);
-countdown.id = "countdown";
-countdown.setAttribute("width", 1280);
-countdown.setAttribute("height", 640);
-countdown.setAttribute("href", "assets/readyimage.png");
-game_screen.appendChild(countdown);
+difficultySelection();
+var arrow_position = 270;
 
 document.onkeydown = function (e) {
     var key = e.key;
-    if (key == "Enter" && !game_on) {
-        game_on = true;
-        countdownScreen();
+    if (key == "w" || key == "W") {
+        arrow_position -= 135;
+        moveArrow(arrow_position);
+    } else if (key == "s" || key == "S") {
+        arrow_position += 135;
+        moveArrow(arrow_position);
+    } else if (key == "Enter") {
+        document.onkeydown = null;
+        removeDifficultySelection();
+        getReadyScreen(arrow_position);
     }
 }
+/////// GAME ENDS HERE ////
 
 function gameSounds() {
     var pauseSound = document.createElement("AUDIO");
@@ -399,8 +443,6 @@ function gameSounds() {
     bgSound.volume = 0.1;
     document.body.appendChild(bgSound);
 
-    bgSound.play();
-
     var readySound = document.createElement("AUDIO");
     readySound.src = "assets/readySound.wav"
     readySound.id = "readySound";
@@ -414,8 +456,19 @@ function gameSounds() {
     document.body.appendChild(beepSound);
 }
 
-function countdownScreen() {
+function getReadyScreen(arrow_position) {
+    var game_screen = document.getElementById("game_screen");
+    var countdown = document.createElementNS("http://www.w3.org/2000/svg", "image")
+    countdown.setAttribute("x", 0);
+    countdown.setAttribute("y", 0);
+    countdown.id = "countdown";
+    countdown.setAttribute("width", 1280);
+    countdown.setAttribute("height", 640);
+    countdown.setAttribute("href", "assets/readyimage.png");
+    game_screen.appendChild(countdown);
+
     document.getElementById("readySound").play();
+    document.getElementById("bgSound").play();
 
     setTimeout(() => {
         document.getElementById("beepSound").play();
@@ -435,7 +488,19 @@ function countdownScreen() {
                     var screen = document.getElementById("game_screen");
                     screen.removeChild(document.getElementById("countdown"));
 
-                    var game = new GameEngine();
+                    switch (arrow_position) {
+                        case (405):
+                            var game = new GameEngine(1);
+                            break;
+                        case (270):
+                            var game = new GameEngine(2);
+                            break;
+                        case (135):
+                            var game = new GameEngine(3);
+                            break;
+            
+                    }
+
                 }, 1200);
 
             }, 1200);
@@ -445,7 +510,51 @@ function countdownScreen() {
     }, 1200);
 }
 
-function msecondsToClock(duration) {
+function difficultySelection() {
+    var game_screen = document.getElementById("game_screen");
+
+    var difficulty = document.createElementNS("http://www.w3.org/2000/svg", "image")
+    difficulty.setAttribute("x", 0);
+    difficulty.setAttribute("y", 0);
+    difficulty.id = "difficulty";
+    difficulty.setAttribute("width", 1280);
+    difficulty.setAttribute("height", 640);
+    difficulty.setAttribute("href", "assets/difficulty.png");
+    game_screen.appendChild(difficulty);
+
+    var selection_arrow = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    selection_arrow.setAttribute("href", "assets/hoverplayerleft.gif");
+    selection_arrow.setAttribute("x", 260);
+    selection_arrow.setAttribute("y", 270);
+    selection_arrow.id = "selection_arrow";
+    selection_arrow.setAttribute("width", 128);
+    selection_arrow.setAttribute("height", 128);
+    game_screen.appendChild(selection_arrow);
+}
+
+function moveArrow(current) {
+    var selection_arrow = document.getElementById("game_screen").getElementById("selection_arrow");
+
+    if (current < 135) {
+        arrow_position = 405;
+        selection_arrow.setAttribute("y", arrow_position);
+    } else if (current > 405) {
+        arrow_position = 135;
+        selection_arrow.setAttribute("y", arrow_position);
+    } else {
+        selection_arrow.setAttribute("y", arrow_position);
+    }
+}
+
+function removeDifficultySelection() {
+    var game_screen = document.getElementById("game_screen");
+    var difficulty = game_screen.getElementById("difficulty");
+    var arrow = game_screen.getElementById("selection_arrow");
+    game_screen.removeChild(difficulty);
+    game_screen.removeChild(arrow);
+}
+
+/*function msecondsToClock(duration) {
     var milliseconds = parseInt((duration % 1000) / 100),
         seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60);
@@ -454,7 +563,7 @@ function msecondsToClock(duration) {
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
     return minutes + ":" + seconds + "." + milliseconds;
-}
+}*/
 
 
 
