@@ -66,7 +66,7 @@ export class Tilemap {
                 spawn_y -= 64;
                 
             } else if (spawn_row >= 91 && spawn_row <= 100 && i != (length-1)) {
-                // 10% chance of a row fully trapped.
+                // 20% chance of a row fully trapped. Last tile excluded.
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)
                 this.current_tilemap.push([shock_left, shock_right]);
@@ -146,7 +146,7 @@ export class Tilemap {
                 spawn_y -= 64;
                 
             } else if (spawn_row >= 86 && spawn_row <= 100 && i != (length-1)) {
-                // 15% chance of a row fully trapped.
+                // 20% chance of a row fully trapped. Last tile excluded
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)
                 this.current_tilemap.push([shock_left, shock_right]);
@@ -224,7 +224,7 @@ export class Tilemap {
                 spawn_y -= 64;
                 
             } else if (spawn_row >= 81 && spawn_row <= 100 && i != (length-1) ) {
-                 // 20% chance of a row fully trapped.
+                 // 20% chance of a row fully trapped. Last tile excluded
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)
                 this.current_tilemap.push([shock_left, shock_right]);

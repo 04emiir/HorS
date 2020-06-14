@@ -13,6 +13,7 @@ class GameEngine {
         //Generates the tilemap with difficulty selected.
         this.map = new Tilemap();
 
+        // Creates the map with difficulty.
         switch (difficulty) {
             case (1):
                 this.map.easyMap();
@@ -25,6 +26,7 @@ class GameEngine {
                 break;
         }
 
+        // Attribute for difficulty
         this.difficulty = difficulty;
 
         //Create the player arrows.
@@ -33,10 +35,13 @@ class GameEngine {
         //Apply opacity to the tilemap.
         this.map.applyOpacity(this.player_hover.current_tile_position);
 
+        //Variable to get the game screen
         this.play_screen = document.getElementById("game_screen");
 
+        // Limit time of the map
         this.limit_time = this.map.limit_time;
         
+        // Shows the controls and race info when the game is created
         this.showRaceInfo();
         this.editControls();
 
@@ -51,12 +56,16 @@ class GameEngine {
         // To control if the game ended.
         this.gameWon = false;
 
+        // 
         this.spamLock = false;
 
+        //The controls are turned on.
         this.turn_controls = true;
 
+        // Add volume to the background sound
         document.getElementById("bgSound").volume = 0.4;
 
+        // Interval for the
         this.stopwatch_control = setInterval(this.updateStopwatch.bind(this), 10);
 
     }
@@ -84,13 +93,17 @@ class GameEngine {
             this.turn_controls = !this.turn_controls;
         }
 
+        //Shows and update the tile where the player is
         this.updateRemainingTile();
 
+        // If you win the race
         if (this.gameWon && this.spamLock == false) {
             this.spamLock = true;
+            //Updates the current record and shows a victory screen
             this.updateRaceRecord();
             this.victoryScreen();
 
+            //then reloads
             setTimeout(() => {
                 location.reload();
             }, 4000);
@@ -302,7 +315,7 @@ class GameEngine {
             //Creates a pause screen
             var controls = document.createElementNS("http://www.w3.org/2000/svg", "image");
 
-            // Attribu
+            // Attributes for the image
             controls.setAttribute("href", "assets/controls_menu.png");
             controls.setAttribute("x", 0);
             controls.id = "controls";
@@ -325,6 +338,7 @@ class GameEngine {
     }
 
     showRaceInfo() {
+        // show all the info
         var game_screen = document.getElementById("game_screen");
 
         var foot = document.createElementNS("http://www.w3.org/2000/svg", "image");
@@ -393,6 +407,7 @@ class GameEngine {
     }
 
     updateRemainingTile() {
+    // 
         if (this.player_hover.current_tile_position < 10)
             this.play_screen.getElementById("current_tiles_remaining").textContent = "0" + this.player_hover.current_tile_position +
             " / " + this.map.total_tiles;
@@ -402,9 +417,11 @@ class GameEngine {
     }
 
     updateStopwatch() {
+        // updates the remaining time
         if (this.limit_time <= 0) {
             clearInterval(this.stopwatch_control);
             this.stopwatch_control = null;
+            location.reload();
             return;
         }
 
@@ -416,6 +433,7 @@ class GameEngine {
     }
 
     updateRaceRecord () {
+        // when you win updates the record (either if one already exists or not)
         var last_record = localStorage.getItem(this.difficulty);
 
         if (last_record === null) {
@@ -450,6 +468,7 @@ document.onkeydown = function (e) {
 }
 /////// GAME ENDS HERE ////
 
+// create game sounds
 function gameSounds() {
     var pauseSound = document.createElement("AUDIO");
     pauseSound.src = "assets/pauseSound.mp3"
@@ -499,6 +518,7 @@ function gameSounds() {
     document.body.appendChild(beepSound);
 }
 
+// ready screen and countdown after difficulty selection
 function getReadyScreen(arrow_position) {
     var game_screen = document.getElementById("game_screen");
     var countdown = document.createElementNS("http://www.w3.org/2000/svg", "image")
@@ -552,6 +572,7 @@ function getReadyScreen(arrow_position) {
     }, 1200);
 }
 
+//creates the difficulty selection screen
 function difficultySelection() {
     var game_screen = document.getElementById("game_screen");
 
@@ -574,6 +595,7 @@ function difficultySelection() {
     game_screen.appendChild(selection_arrow);
 }
 
+//moves arrows in difficulty selection
 function moveArrow(current) {
     var selection_arrow = document.getElementById("game_screen").getElementById("selection_arrow");
 
@@ -588,6 +610,7 @@ function moveArrow(current) {
     }
 }
 
+//remove difficulty selection
 function removeDifficultySelection() {
     var game_screen = document.getElementById("game_screen");
     var difficulty = game_screen.getElementById("difficulty");
@@ -596,6 +619,7 @@ function removeDifficultySelection() {
     game_screen.removeChild(arrow);
 }
 
+// transform limit to timer
 function limitToTimer(time) {
     var min = Math.floor(time / (60 * 100));
     var se = Math.floor((time - min * 60 * 100) / 100);
@@ -603,6 +627,7 @@ function limitToTimer(time) {
     return fillZero(min) + ":" + fillZero(se) + "." + fillZero(ms);
 }
 
+// fill the timer with the 0
 function fillZero(num) {
     return num < 10 ? '0' + num : num;
 };
