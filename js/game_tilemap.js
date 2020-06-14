@@ -10,13 +10,14 @@ export class Tilemap {
         // Attribute that contains the total length of the race (start and finish line included).
         this.total_tiles;
 
-        this.time_remaining = 70000;
+        this.limit_time;
     }
 
     easyMap() {
         // With this function, the tile_map will be an easy one (less traps and length)
         var length = 60;
         this.total_tiles = length + 1;
+        this.limit_time = 50 * 100;
         var spawn_y = 576;
 
         // I create the starting line before the loop.
@@ -64,7 +65,7 @@ export class Tilemap {
                 i++;
                 spawn_y -= 64;
                 
-            } else if (spawn_row >= 91 && spawn_row <= 100) {
+            } else if (spawn_row >= 91 && spawn_row <= 100 && i != (length-1)) {
                 // 10% chance of a row fully trapped.
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)
@@ -98,6 +99,7 @@ export class Tilemap {
         // With this function, the tile_map will be an average one.
         var length = 80;
         this.total_tiles = length + 1;
+        this.limit_time = 70 * 100;
         var spawn_y = 576;
 
         // I create the starting line before the loop.
@@ -143,7 +145,7 @@ export class Tilemap {
                 i++;
                 spawn_y -= 64;
                 
-            } else if (spawn_row >= 86 && spawn_row <= 100) {
+            } else if (spawn_row >= 86 && spawn_row <= 100 && i != (length-1)) {
                 // 15% chance of a row fully trapped.
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)
@@ -175,6 +177,7 @@ export class Tilemap {
         // With this function, the tile_map will harder (and the longest one).
         var length = 100;
         this.total_tiles = length + 1;
+        this.limit_time = 90 * 100;
         var i = 0;
         var spawn_y = 576;
 
@@ -220,7 +223,7 @@ export class Tilemap {
                 i++;
                 spawn_y -= 64;
                 
-            } else if (spawn_row >= 81 && spawn_row <= 100) {
+            } else if (spawn_row >= 81 && spawn_row <= 100 && i != (length-1) ) {
                  // 20% chance of a row fully trapped.
                 var shock_left = new Shock_trap(576, spawn_y);
                 var shock_right = new Shock_trap(640, spawn_y)

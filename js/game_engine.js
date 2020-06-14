@@ -25,6 +25,8 @@ class GameEngine {
                 break;
         }
 
+        this.difficulty = difficulty;
+
         //Create the player arrows.
         this.player_hover = new Player();
 
@@ -33,6 +35,8 @@ class GameEngine {
 
         this.play_screen = document.getElementById("game_screen");
 
+        this.limit_time = this.map.limit_time;
+        
         this.showRaceInfo();
         this.editControls();
 
@@ -53,13 +57,7 @@ class GameEngine {
 
         document.getElementById("bgSound").volume = 0.4;
 
-        console.log("Map length: " + this.map.total_tiles);
-        console.log("Foot placement: " + this.player_hover.foot_placement);
-        console.log("Current position: " + this.player_hover.current_tile_position);
-        console.log("Arrow lock: " + this.player_hover.set_hover_static);
-        console.log("Pause status: " + this.game_paused);
-        console.log("Game status: " + this.gameWon);
-        console.log("----------");
+        this.stopwatch_control = setInterval(this.updateStopwatch.bind(this), 10);
 
     }
 
@@ -78,7 +76,7 @@ class GameEngine {
             this.editPause();
             this.game_paused = !this.game_paused;
         } else if ((key == "q" || key == "Q") && this.game_paused) {
-            window.location.href = "https://www.youtube.com/watch?v=aKCFbZhWNW0";
+            window.location.href = "https://www.google.com";
         } else if ((key == "r" || key == "R") && this.game_paused) {
             location.reload();
         } else if ((key == "c" || key == "C") && !this.game_paused) {
@@ -88,17 +86,11 @@ class GameEngine {
 
         this.updateRemainingTile();
 
-        console.log("Map length: " + this.map.total_tiles);
-        console.log("Foot placement: " + this.player_hover.foot_placement);
-        console.log("Current position: " + this.player_hover.current_tile_position);
-        console.log("Arrow lock: " + this.player_hover.set_hover_static);
-        console.log("Pause status: " + this.game_paused);
-        console.log("Game status: " + this.gameWon);
-        console.log("----------");
-
         if (this.gameWon && this.spamLock == false) {
             this.spamLock = true;
+            this.updateRaceRecord();
             this.victoryScreen();
+
             setTimeout(() => {
                 location.reload();
             }, 4000);
@@ -364,7 +356,7 @@ class GameEngine {
         game_screen.appendChild(clock);
 
         var remaining_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        remaining_time.textContent = "00:00:000";
+        remaining_time.textContent = limitToTimer(this.limit_time);
         remaining_time.setAttribute("x", 1056);
         remaining_time.setAttribute("y", 348);
         remaining_time.id = "remaining_time";
@@ -383,7 +375,14 @@ class GameEngine {
         game_screen.appendChild(crown);
 
         var best_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        best_time.textContent = "00:00:000";
+
+        var current_record = localStorage.getItem(this.difficulty);
+        if (current_record != null) {
+            best_time.textContent = limitToTimer(parseInt(current_record));
+        } else {
+            best_time.textContent = "00:00.000";
+        }
+
         best_time.setAttribute("x", 1056);
         best_time.setAttribute("y", 498);
         best_time.id = "best_time";
@@ -400,6 +399,32 @@ class GameEngine {
         else
             this.play_screen.getElementById("current_tiles_remaining").textContent = this.player_hover.current_tile_position +
             " / " + this.map.total_tiles;
+    }
+
+    updateStopwatch() {
+        if (this.limit_time <= 0) {
+            clearInterval(this.stopwatch_control);
+            this.stopwatch_control = null;
+            return;
+        }
+
+        if (!this.game_paused) {
+            this.limit_time--;
+        }
+
+        document.getElementById("game_screen").getElementById("remaining_time").textContent = limitToTimer(this.limit_time);
+    }
+
+    updateRaceRecord () {
+        var last_record = localStorage.getItem(this.difficulty);
+
+        if (last_record === null) {
+            localStorage.setItem(this.difficulty, this.limit_time);
+            window.alert("Nuevo record : " + limitToTimer(this.limit_time));
+        } else if (parseInt(last_record) < this.limit_time) {
+            localStorage.setItem(this.difficulty, this.limit_time);
+            window.alert("Nuevo record : " + limitToTimer(this.limit_time));
+        }
     }
 }
 
@@ -516,7 +541,6 @@ function getReadyScreen(arrow_position) {
                         case (135):
                             var game = new GameEngine(3);
                             break;
-            
                     }
 
                 }, 1200);
@@ -572,18 +596,13 @@ function removeDifficultySelection() {
     game_screen.removeChild(arrow);
 }
 
-/*function msecondsToClock(duration) {
-    var milliseconds = parseInt((duration % 1000) / 100),
-        seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60);
+function limitToTimer(time) {
+    var min = Math.floor(time / (60 * 100));
+    var se = Math.floor((time - min * 60 * 100) / 100);
+    var ms = time - Math.floor(time / 100) * 100;
+    return fillZero(min) + ":" + fillZero(se) + "." + fillZero(ms);
+}
 
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-    return minutes + ":" + seconds + "." + milliseconds;
-}*/
-
-
-
-
-
+function fillZero(num) {
+    return num < 10 ? '0' + num : num;
+};
