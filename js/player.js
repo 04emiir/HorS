@@ -9,7 +9,7 @@ export class Player {
         this.position_y = 576;
 
         //  Attributes player_hover_left (left arrow inside the game)
-        this.player_hover_left.setAttribute("href", "assets/hoverplayerleft.gif");
+        this.player_hover_left.setAttribute("href", "./assets/hoverplayerleft.gif");
         this.player_hover_left.setAttribute("x", 492);
         this.player_hover_left.setAttribute("y", this.position_y);
         this.player_hover_left.setAttribute("width", 64);
@@ -18,7 +18,7 @@ export class Player {
 
 
         //  Attributes for player_hover_right (right arrow inside the game)
-        this.player_hover_right.setAttribute("href", "assets/hoverplayerright.gif");
+        this.player_hover_right.setAttribute("href", "./assets/hoverplayerright.gif");
         this.player_hover_right.setAttribute("x", 724);
         this.player_hover_right.setAttribute("y", this.position_y);
         this.player_hover_right.setAttribute("width", 64);

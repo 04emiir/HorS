@@ -40,7 +40,7 @@ class GameEngine {
 
         // Limit time of the map
         this.limit_time = this.map.limit_time;
-        
+
         // Shows the controls and race info when the game is created
         this.showRaceInfo();
         this.editControls();
@@ -268,7 +268,7 @@ class GameEngine {
             bg.volume = 0.1;
 
             // Attribu
-            pause.setAttribute("href", "assets/pause.png");
+            pause.setAttribute("href", "./assets/pause.png");
             pause.setAttribute("x", 0);
             pause.id = "pause";
             pause.setAttribute("y", 0);
@@ -297,7 +297,7 @@ class GameEngine {
         document.getElementById("endSound").play();
 
         //  Attributes win (when winning the game)
-        win.setAttribute("href", "assets/win.png");
+        win.setAttribute("href", "./assets/win.png");
         win.setAttribute("x", 0);
         win.id = "win";
         win.setAttribute("y", 0);
@@ -316,7 +316,7 @@ class GameEngine {
             var controls = document.createElementNS("http://www.w3.org/2000/svg", "image");
 
             // Attributes for the image
-            controls.setAttribute("href", "assets/controls_menu.png");
+            controls.setAttribute("href", "./assets/controls_menu.png");
             controls.setAttribute("x", 0);
             controls.id = "controls";
             controls.setAttribute("y", 0);
@@ -347,7 +347,7 @@ class GameEngine {
         foot.id = "foot";
         foot.setAttribute("width", 64);
         foot.setAttribute("height", 64);
-        foot.setAttribute("href", "assets/foot.png");
+        foot.setAttribute("href", "./assets/foot.png");
         game_screen.appendChild(foot);
 
         var current_tiles_remaining = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -366,7 +366,7 @@ class GameEngine {
         clock.id = "clock";
         clock.setAttribute("width", 48);
         clock.setAttribute("height", 48);
-        clock.setAttribute("href", "assets/clock.png");
+        clock.setAttribute("href", "./assets/clock.png");
         game_screen.appendChild(clock);
 
         var remaining_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -385,7 +385,7 @@ class GameEngine {
         crown.id = "crown";
         crown.setAttribute("width", 64);
         crown.setAttribute("height", 64);
-        crown.setAttribute("href", "assets/crown.png");
+        crown.setAttribute("href", "./assets/crown.png");
         game_screen.appendChild(crown);
 
         var best_time = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -407,7 +407,7 @@ class GameEngine {
     }
 
     updateRemainingTile() {
-    // 
+        // 
         if (this.player_hover.current_tile_position < 10)
             this.play_screen.getElementById("current_tiles_remaining").textContent = "0" + this.player_hover.current_tile_position +
             " / " + this.map.total_tiles;
@@ -432,7 +432,7 @@ class GameEngine {
         document.getElementById("game_screen").getElementById("remaining_time").textContent = limitToTimer(this.limit_time);
     }
 
-    updateRaceRecord () {
+    updateRaceRecord() {
         // when you win updates the record (either if one already exists or not)
         var last_record = localStorage.getItem(this.difficulty);
 
@@ -446,9 +446,9 @@ class GameEngine {
     }
 }
 
-////// GAME IS BORN HERE ////
+////// GAME ////
 gameSounds();
-
+window.alert("Move with W or S. Select with ENTER")
 difficultySelection();
 var arrow_position = 270;
 
@@ -466,12 +466,12 @@ document.onkeydown = function (e) {
         getReadyScreen(arrow_position);
     }
 }
-/////// GAME ENDS HERE ////
+/////// GAME ////
 
 // create game sounds
 function gameSounds() {
     var pauseSound = document.createElement("AUDIO");
-    pauseSound.src = "assets/pauseSound.mp3"
+    pauseSound.src = "./assets/pauseSound.mp3"
     pauseSound.controls = false;
     pauseSound.id = "pauseSound";
     pauseSound.volume = 0.7
@@ -479,26 +479,26 @@ function gameSounds() {
     document.body.appendChild(pauseSound);
 
     var zapSound = document.createElement("AUDIO");
-    zapSound.src = "assets/zapSound.wav"
+    zapSound.src = "./assets/zapSound.wav"
     zapSound.id = "zapSound";
     zapSound.style = "display:none"
     document.body.appendChild(zapSound);
 
     var jumpSound = document.createElement("AUDIO");
-    jumpSound.src = "assets/jumpSound.wav"
+    jumpSound.src = "./assets/jumpSound.wav"
     jumpSound.id = "jumpSound";
     jumpSound.volume = 0.6
     jumpSound.style = "display:none"
     document.body.appendChild(jumpSound);
 
     var endSound = document.createElement("AUDIO");
-    endSound.src = "assets/endSound.wav"
+    endSound.src = "./assets/endSound.wav"
     endSound.id = "endSound";
     endSound.style = "display:none"
     document.body.appendChild(endSound);
 
     var bgSound = document.createElement("AUDIO");
-    bgSound.src = "assets/backgroundSound.mp3"
+    bgSound.src = "./assets/backgroundSound.mp3"
     bgSound.id = "bgSound";
     bgSound.style = "display:none"
     bgSound.loop = true;
@@ -506,14 +506,15 @@ function gameSounds() {
     document.body.appendChild(bgSound);
 
     var readySound = document.createElement("AUDIO");
-    readySound.src = "assets/readySound.wav"
+    readySound.src = "./assets/readySound.wav"
     readySound.id = "readySound";
     readySound.style = "display:none"
     document.body.appendChild(readySound);
 
     var beepSound = document.createElement("AUDIO");
-    beepSound.src = "assets/beepSound.wav"
+    beepSound.src = "./assets/beepSound.wav"
     beepSound.id = "beepSound";
+    beepSound.volume = 0.6;
     beepSound.style = "display:none"
     document.body.appendChild(beepSound);
 }
@@ -527,7 +528,7 @@ function getReadyScreen(arrow_position) {
     countdown.id = "countdown";
     countdown.setAttribute("width", 1280);
     countdown.setAttribute("height", 640);
-    countdown.setAttribute("href", "assets/readyimage.png");
+    countdown.setAttribute("href", "./assets/readyimage.png");
     game_screen.appendChild(countdown);
 
     document.getElementById("readySound").play();
@@ -535,15 +536,15 @@ function getReadyScreen(arrow_position) {
 
     setTimeout(() => {
         document.getElementById("beepSound").play();
-        countdown.setAttribute("href", "assets/3.png");
+        countdown.setAttribute("href", "./assets/3.png");
 
         setTimeout(() => {
             document.getElementById("beepSound").play();
-            countdown.setAttribute("href", "assets/2.png");
+            countdown.setAttribute("href", "./assets/2.png");
 
             setTimeout(() => {
                 document.getElementById("beepSound").play();
-                countdown.setAttribute("href", "assets/1.png");
+                countdown.setAttribute("href", "./assets/1.png");
 
                 setTimeout(() => {
                     document.getElementById("endSound").play();
@@ -582,11 +583,11 @@ function difficultySelection() {
     difficulty.id = "difficulty";
     difficulty.setAttribute("width", 1280);
     difficulty.setAttribute("height", 640);
-    difficulty.setAttribute("href", "assets/difficulty.png");
+    difficulty.setAttribute("href", "./assets/difficulty.png");
     game_screen.appendChild(difficulty);
 
     var selection_arrow = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    selection_arrow.setAttribute("href", "assets/hoverplayerleft.gif");
+    selection_arrow.setAttribute("href", "./assets/hoverplayerleft.gif");
     selection_arrow.setAttribute("x", 260);
     selection_arrow.setAttribute("y", 270);
     selection_arrow.id = "selection_arrow";
